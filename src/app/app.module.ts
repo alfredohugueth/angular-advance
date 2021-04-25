@@ -9,7 +9,7 @@ import { AuthModule } from './auth/auth.module';
 /* Components */
 
 import { AppComponent } from './app.component';
-import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
+import { NopagefoundComponent } from './nopagefound/nopagefound.component';
 
 
 
