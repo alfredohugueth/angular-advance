@@ -8,9 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AccountSettingsComponent implements OnInit {
 
+  public linkTheme= document.querySelector("#theme");
+
+
   constructor() { }
 
   ngOnInit(): void {
+    
+
+  }
+
+  changeTheme( theme:String ){
+    
+
+    const url = `./assets/css/colors/${ theme }.css`;
+    /* Remplazamos el atributo href del elemento */
+    this.linkTheme?.setAttribute('href', url);
+    /* Guardamos en el localStorage */
+    localStorage.setItem('theme', url);
   }
 
 }
