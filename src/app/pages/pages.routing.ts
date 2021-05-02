@@ -17,22 +17,15 @@ const routes: Routes = [
     {
         path: 'dashboard', 
         component:PagesComponent,
-        children:[
-          {path: '', component:DashboardComponent},
-          {path: 'progress', component:ProgressComponent},
-          {path: 'grafica1', component:Grafica1Component},
-          {path: 'account-settings', component:AccountSettingsComponent},
-          {path: 'promesas', component:PromesasComponent},
-          {path: 'rxjs', component:RxjsComponent}
+        children: [
+          {path: '', component:DashboardComponent, data: {titulo: 'Dashboard'}},
+          {path: 'progress', component:ProgressComponent ,data: {titulo: 'ProgressBar'}},
+          {path: 'grafica1', component:Grafica1Component ,data: {titulo: 'Gráfica #1'}},
+          {path: 'account-settings', component:AccountSettingsComponent ,data: {titulo: 'Ajustes de cuenta'}},
+          {path: 'promesas', component:PromesasComponent ,data: {titulo: 'Promesas'}},
+          {path: 'rxjs', component:RxjsComponent, data: {titulo: 'RxJs'}}
         ]
       },
-
-
-    //{ path: 'path/:routeParam', component: MyComponent },
-    //{ path: 'staticPath', component: ... },
-    //{ path: '**', component: ... },
-    //{ path: 'oldPath', redirectTo: '/staticPath' },
-    //{ path: ..., component: ..., data: { message: 'Custom' }
 ];
 
 @NgModule({
