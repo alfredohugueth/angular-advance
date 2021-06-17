@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+// import swal from 'sweetalert'; 
 
 @Component({
   selector: 'app-register',
@@ -14,10 +16,12 @@ export class RegisterComponent {
     
     nombre : [ 'Alfredo', [ Validators.required, Validators.minLength(3) ] ],
     email : [ 'test100@gmail.com', [ Validators.required, Validators.minLength(3), Validators.email ] ],
-    password : [ '', [ Validators.required, Validators.minLength(3) ]],
-    password2 : [ '', [ Validators.required, Validators.minLength(3) ]],
-    terminos: [ false, [ Validators.required, Validators.minLength(3) ]]
+    password : [ '123456', [ Validators.required, Validators.minLength(3) ]],
+    password2 : [ '123456', [ Validators.required, Validators.minLength(3) ]],
+    terminos: [ true, [ Validators.required, Validators.minLength(3) ]]
 
+  }, {
+    validators: this.passwordsIguales( 'password', 'password2')
   });
 
 
@@ -26,7 +30,8 @@ export class RegisterComponent {
   crearUsuario() {
     
     this.formSubmitted = true;
-    console.log( this.registerForm.value );
+
+    console.log( this.registerForm);
 
     if ( this.registerForm.valid ) {
       
@@ -58,6 +63,44 @@ export class RegisterComponent {
 
     return !this.registerForm.get( 'terminos' )?.value && this.formSubmitted;
 
+  }
+
+  contrasenasNoValidas() {
+
+    const pass1 = this.registerForm.get( 'password' )?.value;
+    const pass2 = this.registerForm.get( 'password2' )?.value;
+
+    /* Verificamos que ambas sean iguales */
+    if ( pass1 == pass2 ) {
+      
+      return false;
+
+    } else {
+      
+      return true;
+
+    }
+
+  }
+
+  passwordsIguales( password1 : string, password2 : string) : Function {
+
+    return ( formGroup : FormGroup ) => {
+
+      const pass1Control = formGroup.get( password1 );
+      const pass2Control = formGroup.get( password2 );
+
+      /* Verificamos que sean iguales las contraseñas */
+      if ( pass1Control?.value === pass2Control?.value ) {
+
+        pass2Control?.setErrors( null );
+
+      } else {
+
+        pass2Control?.setErrors({ noEsIgual : true });
+
+      }
+    }
   }
 
   
