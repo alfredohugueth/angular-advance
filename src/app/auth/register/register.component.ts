@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UsuarioService } from 'src/app/services/usuario.service';
 
 // import swal from 'sweetalert'; 
 
@@ -25,7 +26,8 @@ export class RegisterComponent {
   });
 
 
-  constructor( private fb: FormBuilder) { }
+  constructor( private fb: FormBuilder,
+               private usuarioService : UsuarioService ) { }
 
   crearUsuario() {
     
@@ -33,15 +35,19 @@ export class RegisterComponent {
 
     console.log( this.registerForm);
 
-    if ( this.registerForm.valid ) {
+    if ( this.registerForm.invalid ) {
       
-      console.log(' ----> Posteando formulario ');
-    
-    } else {
-
-      console.log(' ----> Formulario no valido ');
+          return
 
     }
+    
+    this.usuarioService.crearUsuario( this.registerForm.value )
+        .subscribe( res => {
+          
+          console.log( 'Usuario Creado' );
+          console.log(' -------> El usuario creado es: ', res);
+
+        }, (err) => console.log( 'Error creando el usuario: ', err.error.msg ));
   
   }
 
