@@ -4,17 +4,20 @@ import { Router } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import Swal from 'sweetalert2';
 
+
+declare const gapi : any;
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: [ './login.component.css' ]
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   public loginForm = this.fb.group({
     
-    email : [ 'test100@gmail.com', [ Validators.required, Validators.minLength(3), Validators.email ] ],
-    password : [ '123456', [ Validators.required, Validators.minLength(3) ]],
+    email : [ localStorage.getItem( 'Email' ) || '', [ Validators.required, Validators.minLength(3), Validators.email ] ],
+    password : [ '', [ Validators.required, Validators.minLength(3) ]],
     remember : [false]
 
   });
@@ -23,11 +26,26 @@ export class LoginComponent {
   constructor( private router: Router,
                private fb: FormBuilder,
                private usuarioService : UsuarioService) { }
+  async ngOnInit() {
+
+    await this.renderButton();
+  
+  }
   
   login(){
     
-    console.log(this.loginForm.value)
-    // this.router.navigateByUrl('/');
+    /* Recordar contraseña */
+    if ( this.loginForm.get( 'remember' )?.value ) {
+
+      localStorage.setItem( 'Email', this.loginForm.get( 'email' )?.value );
+    
+    } else {
+
+      localStorage.removeItem( 'Email' );
+
+    }
+
+    /* Petición post a wbs para verificar usuario */
     this.usuarioService.login( this.loginForm.value )
                         .subscribe( resp => {
 
@@ -40,5 +58,31 @@ export class LoginComponent {
                         })
 
   }
+
+  onSuccess( googleUser : any ) {
+    // console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
+    var id_token = googleUser.getAuthResponse().id_token;
+    console.log('----> El token generado fue: ', id_token );
+    
+  }
+
+  onFailure( error : any ) {
+    console.log(error);
+  }
+
+  renderButton() {
+    gapi.signin2.render('my-signin2', {
+      'scope': 'profile email',
+      'width': 240,
+      'height': 50,
+      'longtitle': true,
+      'theme': 'dark',
+      'onsuccess': this.onSuccess,
+      'onfailure': this.onFailure
+    });
+  }
+
+
+
 
 }
