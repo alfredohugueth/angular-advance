@@ -1,9 +1,9 @@
 /* Angular Components and Materials */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { tap } from "rxjs/operators";
+import { catchError, map, tap } from "rxjs/operators";
 
 /* Interfaces */
 import { LoginForm } from '../interfaces/login-form.interface';
@@ -18,6 +18,31 @@ export class UsuarioService {
 
   constructor( private http : HttpClient ) { }
 
+  validarToken() : Observable<boolean> {
+
+    const token = localStorage.getItem( 'token' ) || 'NoValido';
+
+    console.log('Se procede a validar el token ');
+
+    return this.http.get( `${base_url}/login/renew`, {
+      headers : {
+      
+        'x-token' : token
+      
+      }
+    }).pipe(
+      tap( (resp : any) => {
+
+        console.log( 'Recibimos la respuesta del servidor: ', resp);
+        localStorage.setItem( 'token', resp[ 'token' ] );
+
+      }),
+      map( resp => true ),
+      catchError( error => of(false))
+    );
+
+  }
+
   crearUsuario( formData : RegisterForm ) : Observable<any> {
 
     console.log('-----> Creando al Usuario ');
@@ -25,16 +50,13 @@ export class UsuarioService {
     return this.http.post( `${base_url}/usuarios`, formData )
                     
                     .pipe(
-                    
                       tap( (res : any) => {
-                        
+
                         localStorage.setItem( 'token', res[ 'token' ] );
 
                       })
-                    
                     )
-
-  }
+ }
 
   login( formData : LoginForm ) : Observable<any> {
 

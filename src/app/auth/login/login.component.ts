@@ -37,22 +37,23 @@ export class LoginComponent implements OnInit {
   
   login(){
     
-    /* Recordar contraseña */
-    if ( this.loginForm.get( 'remember' )?.value ) {
-
-      localStorage.setItem( 'Email', this.loginForm.get( 'email' )?.value );
-    
-    } else {
-
-      localStorage.removeItem( 'Email' );
-
-    }
-
     /* Petición post a wbs para verificar usuario */
     this.usuarioService.login( this.loginForm.value )
                         .subscribe( resp => {
+                          
+                          /* Recordar contraseña */
+                          if ( this.loginForm.get( 'remember' )?.value ) {
 
-                          console.log(resp);
+                            localStorage.setItem( 'Email', this.loginForm.get( 'email' )?.value );
+                          
+                          } else {
+
+                            localStorage.removeItem( 'Email' );
+
+                          }
+                          
+                          // Navegar a Dashboard
+                          this.router.navigateByUrl('/');
                         
                         }, (err) => {
 
@@ -98,9 +99,14 @@ export class LoginComponent implements OnInit {
           
           const id_token = googleUser.getAuthResponse().id_token;
           console.log('----> El token de google generado es: ', id_token);
-          this.usuarioService.loginGoogle( id_token ).subscribe();
+          this.usuarioService.loginGoogle( id_token )
+            .subscribe( resp => {
 
-          // TODO: Mover al dashboard
+              // Navegar a Dashboard
+              this.router.navigateByUrl('/');
+
+            });
+
         
         }, ( error : any ) => {
           

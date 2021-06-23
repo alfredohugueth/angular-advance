@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Swal from 'sweetalert2'; 
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -27,7 +28,8 @@ export class RegisterComponent {
 
 
   constructor( private fb: FormBuilder,
-               private usuarioService : UsuarioService ) { }
+               private usuarioService : UsuarioService,
+               private router : Router ) { }
 
   crearUsuario() {
     
@@ -46,6 +48,9 @@ export class RegisterComponent {
           
           console.log( 'Usuario Creado' );
           console.log(' -------> El usuario creado es: ', res);
+
+          // Navegar a Dashboard
+          this.router.navigateByUrl('/');
 
         }, (err) => {
           
