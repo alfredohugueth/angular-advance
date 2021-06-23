@@ -14,6 +14,9 @@ declare const gapi : any;
 })
 export class LoginComponent implements OnInit {
 
+  public formSubmitted = false;
+  public auth2 : any;
+
   public loginForm = this.fb.group({
     
     email : [ localStorage.getItem( 'Email' ) || '', [ Validators.required, Validators.minLength(3), Validators.email ] ],
@@ -59,16 +62,8 @@ export class LoginComponent implements OnInit {
 
   }
 
-  onSuccess( googleUser : any ) {
-    // console.log('Logged in as: ' + googleUser.getBasicProfile().getName());
-    var id_token = googleUser.getAuthResponse().id_token;
-    console.log('----> El token generado fue: ', id_token );
-    
-  }
+  //   // var id_token = googleUser.getAuthResponse().id_token;
 
-  onFailure( error : any ) {
-    console.log(error);
-  }
 
   renderButton() {
     gapi.signin2.render('my-signin2', {
@@ -77,10 +72,43 @@ export class LoginComponent implements OnInit {
       'height': 50,
       'longtitle': true,
       'theme': 'dark',
-      'onsuccess': this.onSuccess,
-      'onfailure': this.onFailure
     });
+    
+    this.startApp();
+
   }
+
+  startApp() {
+    gapi.load('auth2', () =>{
+      // Retrieve the singleton for the GoogleAuth library and set up the client.
+      this.auth2 = gapi.auth2.init({
+        client_id: '285988215249-g49qcb1l7dc0dkv4koivefvnl6ee4h03.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
+      });
+
+      this.attachSignin(document.getElementById('google_btn'));
+    
+    });
+  };
+
+   attachSignin( element : any ) {
+    console.log(element.id);
+    this.auth2.attachClickHandler(element, {},
+        ( googleUser : any) => {
+          
+          const id_token = googleUser.getAuthResponse().id_token;
+          console.log('----> El token de google generado es: ', id_token);
+          this.usuarioService.loginGoogle( id_token ).subscribe();
+
+          // TODO: Mover al dashboard
+        
+        }, ( error : any ) => {
+          
+          alert(JSON.stringify(error, undefined, 2));
+        
+        });
+  }
+
 
 
 
