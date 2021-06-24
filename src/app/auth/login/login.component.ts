@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { UsuarioService } from 'src/app/services/usuario.service';
@@ -28,7 +28,8 @@ export class LoginComponent implements OnInit {
 
   constructor( private router: Router,
                private fb: FormBuilder,
-               private usuarioService : UsuarioService) { }
+               private usuarioService : UsuarioService,
+               private ngZone : NgZone) { }
   async ngOnInit() {
 
     await this.renderButton();
@@ -79,17 +80,12 @@ export class LoginComponent implements OnInit {
 
   }
 
-  startApp() {
-    gapi.load('auth2', () =>{
-      // Retrieve the singleton for the GoogleAuth library and set up the client.
-      this.auth2 = gapi.auth2.init({
-        client_id: '285988215249-g49qcb1l7dc0dkv4koivefvnl6ee4h03.apps.googleusercontent.com',
-        cookiepolicy: 'single_host_origin',
-      });
-
-      this.attachSignin(document.getElementById('google_btn'));
+  async startApp() {
     
-    });
+    await this.usuarioService.googleInit();
+    this.auth2 = this.usuarioService.auth2;
+    
+    this.attachSignin(document.getElementById('google_btn'));
   };
 
    attachSignin( element : any ) {
@@ -102,8 +98,12 @@ export class LoginComponent implements OnInit {
           this.usuarioService.loginGoogle( id_token )
             .subscribe( resp => {
 
-              // Navegar a Dashboard
-              this.router.navigateByUrl('/');
+              this.ngZone.run( () => {
+
+                // Navegar a Dashboard
+                this.router.navigateByUrl('/');
+
+              })
 
             });
 
