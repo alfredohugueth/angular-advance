@@ -57,7 +57,6 @@ export class UsuarioService {
         } = resp [ 'usuario' ];
 
         this.usuario = new Usuario( nombre, email, '', img, google, role, uid);
-        this.usuario.imprimirUsuario();
         
         localStorage.setItem( 'token', resp[ 'token' ] );
         console.log( this.usuario );
