@@ -8,12 +8,18 @@
                 <h4 class="card-title">Mi perfil de usuario</h4>
                 <h6 class="card-subtitle">Ajustes</h6>
 
-                <form class="form p-t-20">
+                <form class="form p-t-20" 
+                      [formGroup]="profileForm"
+                      (submit)="actualizarPerfil()">
                     
                     <div class="form-group">
                         <label for="exampleInputuname2">User Name</label>
                         <div class="input-group">
-                            <input type="text" class="form-control" id="exampleInputuname2" placeholder="Username">
+                            <input type="text" 
+                                   class="form-control" 
+                                   id="exampleInputuname2" 
+                                   placeholder="Username"
+                                   formControlName="nombre">
                             <div class="input-group-addon"><i class="ti-user"></i></div>
                         </div>
                     </div>
@@ -21,13 +27,19 @@
                     <div class="form-group">
                         <label for="exampleInputEmail2">Email address</label>
                         <div class="input-group">
-                            <input type="email" class="form-control" id="exampleInputEmail2" placeholder="Enter email">
+                            <input type="email"
+                                   class="form-control" 
+                                   id="exampleInputEmail2" 
+                                   placeholder="Enter email"
+                                   formControlName="email">
                             <div class="input-group-addon"><i class="ti-email"></i></div>
                         </div>
                     </div>
                     
                     <div class="text-center">
-                        <button type="submit" class="btn btn-success btn-block waves-effect waves-light m-r-10">
+                        <button type="submit" 
+                                class="btn btn-success btn-block waves-effect waves-light m-r-10"
+                                [disabled]="profileForm.invalid">
                             <i class="fa fa-save"></i>
                             Guardar Cambios
                         </button>
@@ -63,10 +75,14 @@
                 <br>
 
                 <div class="text-center">
+
                     <button type="submit" class="btn btn-success btn-block waves-effect waves-light m-r-10">
+                    
                         <i class="fa fa-save"></i>
                         Cambiar Imagen
+                    
                     </button>
+                
                 </div>
 
 

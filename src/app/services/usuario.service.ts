@@ -26,20 +26,33 @@ export class UsuarioService {
   constructor( private http : HttpClient, private router : Router, private ngZone : NgZone) 
   { 
       this.googleInit();
-      this.usuario = new Usuario( 'nombre', 'email', '', 'img', 'google', true, 'uid');
+      this.usuario = new Usuario( 'nombre', 'email', '', 'img', false , 'user', 'uid');
       
+  }
+
+  get token() : string
+  {
+
+    return localStorage.getItem( 'token' ) || 'NoValido';
+  
+  }
+
+  get uid() : string
+  {
+
+    return this.usuario.uid || '';
+
   }
 
   validarToken() : Observable<boolean> {
 
-    const token = localStorage.getItem( 'token' ) || 'NoValido';
 
     console.log('Se procede a validar el token ');
 
     return this.http.get( `${base_url}/login/renew`, {
       headers : {
       
-        'x-token' : token
+        'x-token' : this.token
       
       }
     }).pipe(
@@ -154,5 +167,23 @@ export class UsuarioService {
     })
 
 
+  }
+
+  actualizarPerfil( data : { email : string, nombre : string, role : string | undefined } )
+  {
+
+    data = {
+    
+      ...data,
+      role : this.usuario.role
+    
+    };
+
+    return this.http.put( `${base_url}/usuarios/${ this.uid }`, data, { headers : {
+      
+      'x-token' : this.token
+    
+    }} )
+    
   }
 }
