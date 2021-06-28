@@ -21,11 +21,12 @@ declare const gapi : any;
 export class UsuarioService {
 
   public auth2 : any;
-  public usuario : Usuario | undefined;
+  public usuario : Usuario ;
 
   constructor( private http : HttpClient, private router : Router, private ngZone : NgZone) 
   { 
       this.googleInit();
+      this.usuario = new Usuario( 'nombre', 'email', '', 'img', 'google', true, 'uid');
       
   }
 

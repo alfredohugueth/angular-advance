@@ -11,7 +11,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 export class HeaderComponent {
 
   public imgUrl : string | undefined = '' ;
-  public usuario : Usuario | undefined;
+  public usuario : Usuario;
 
 
   constructor( private userService : UsuarioService) 
