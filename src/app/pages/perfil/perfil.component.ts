@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Usuario } from 'src/app/models/usuario.model';
+import { FileUploadService } from 'src/app/services/file-upload.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
@@ -11,9 +13,13 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 export class PerfilComponent implements OnInit {
 
   public profileForm!: FormGroup;
+  public usuario : Usuario;
+  public imagenSubir! : File;
 
-  constructor( private formBuilder : FormBuilder, private userService : UsuarioService ) 
+  constructor( private formBuilder : FormBuilder, private userService : UsuarioService, private fileUploadService : FileUploadService ) 
   { 
+
+    this.usuario = userService.usuario;
 
   }
 
@@ -22,8 +28,8 @@ export class PerfilComponent implements OnInit {
     
     this.profileForm = this.formBuilder.group({
 
-      nombre : [ '123', Validators.required ],
-      email : [ 'abc', [Validators.required, Validators.email ] ]
+      nombre : [ this.usuario.nombre, Validators.required ],
+      email : [ this.usuario.email, [Validators.required, Validators.email ] ]
 
     });
 
@@ -34,12 +40,33 @@ export class PerfilComponent implements OnInit {
 
     console.log( this.profileForm?.value );
     this.userService.actualizarPerfil( this.profileForm.value )
-      .subscribe( resp => {
+      .subscribe( () => {
 
-        console.log( '-----> La respuesta del servidor a actualizar perfil es: ', resp );
-        
+        const { nombre, email} = this.profileForm.value;
+        this.usuario.nombre = nombre;
+        this.usuario.email = email;
+
       })
 
+  }
+
+  cambiarImagen( $event : Event )
+  {
+
+    console.log( $event );
+    const target = ( $event.target as HTMLInputElement );
+    const file = ( target.files as FileList)[0];
+
+    /* Definimos los datos para enviar el archivo */
+    this.imagenSubir =  file;
+
+
+  }
+
+  subirImagen()
+  {
+    this.fileUploadService.actualizarFoto( this.imagenSubir, 'usuarios', this.usuario.uid || '' )
+    .then( img => console.log( img ))
   }
 
 }
