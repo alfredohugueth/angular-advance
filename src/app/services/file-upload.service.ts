@@ -36,7 +36,15 @@ export class FileUploadService {
 
       const data = await resp.json();
       console.log('---> La respuesta del servidor es la siguiente: ', data);
-      return 'Nombre de la imagen'
+
+      if ( data.ok ) 
+      {
+        return data.nombreArchivo;
+      }
+      else
+      {
+        return false;
+      }
 
     } 
     catch (error) 

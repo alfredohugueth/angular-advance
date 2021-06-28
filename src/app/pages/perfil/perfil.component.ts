@@ -15,6 +15,7 @@ export class PerfilComponent implements OnInit {
   public profileForm!: FormGroup;
   public usuario : Usuario;
   public imagenSubir! : File;
+  public imgTemp : any;
 
   constructor( private formBuilder : FormBuilder, private userService : UsuarioService, private fileUploadService : FileUploadService ) 
   { 
@@ -50,7 +51,7 @@ export class PerfilComponent implements OnInit {
 
   }
 
-  cambiarImagen( $event : Event )
+  async cambiarImagen( $event : Event )
   {
 
     console.log( $event );
@@ -60,13 +61,27 @@ export class PerfilComponent implements OnInit {
     /* Definimos los datos para enviar el archivo */
     this.imagenSubir =  file;
 
-
+    if ( !file ) 
+    {
+      this.imgTemp = null
+    } 
+    else
+    {
+      
+      const reader = new FileReader();
+      reader.readAsDataURL( file );
+  
+      reader.onloadend = async() => {
+        this.imgTemp = reader.result;
+      }
+      
+    }
   }
 
   subirImagen()
   {
     this.fileUploadService.actualizarFoto( this.imagenSubir, 'usuarios', this.usuario.uid || '' )
-    .then( img => console.log( img ))
+    .then( img => this.usuario.img = img)
   }
 
 }
