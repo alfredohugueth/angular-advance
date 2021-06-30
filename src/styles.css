@@ -16,3 +16,15 @@
     width: 200px;
 }
 
+.w100{
+    width: 100px;
+}
+
+.avatar{
+    
+    width: 30px;
+    border-radius: 100%;
+    border : 1px solid grey;
+
+}
+
