@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario.model';
+import { BusquedasService } from 'src/app/services/busquedas.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 
 @Component({
@@ -15,7 +16,7 @@ export class UsuariosComponent implements OnInit {
   public desde : number = 0;
   public cargando : boolean = true;
 
-  constructor( private usuarioService : UsuarioService ) 
+  constructor( private usuarioService : UsuarioService, private busquedaService : BusquedasService ) 
   { }
 
   ngOnInit(): void 
@@ -55,6 +56,17 @@ export class UsuariosComponent implements OnInit {
                           }
                        })
     
+  }
+
+  buscar( termino : string)
+  {
+    this.busquedaService.buscar( 'usuarios', termino )
+                        .subscribe(
+                          (resp : any) => {
+                            console.log( resp );
+                            this.usuarios = resp;
+                          }
+                        )
   }
 
 }

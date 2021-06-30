@@ -8,7 +8,9 @@
 
                 <input type="text"
                         class="form-control"
-                        placeholder="Buscar usuario..."/>
+                        placeholder="Buscar usuario..."
+                        (keyup)="buscar( txtBuscar.value )"
+                        #txtBuscar/>
             </div>
 
         </div>
