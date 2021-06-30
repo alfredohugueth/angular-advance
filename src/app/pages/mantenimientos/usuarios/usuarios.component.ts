@@ -15,7 +15,7 @@ export class UsuariosComponent implements OnInit {
   public usuarios : Usuario[] = [];
   public desde : number = 0;
   public cargando : boolean = true;
-
+  public usuariosTemp : Usuario[] = [];
   constructor( private usuarioService : UsuarioService, private busquedaService : BusquedasService ) 
   { }
 
@@ -51,8 +51,10 @@ export class UsuariosComponent implements OnInit {
                           if ( usuarios.length !== 0)
                           {
 
-                            this.usuarios = usuarios                         
+                            this.usuarios = usuarios;                         
                             this.cargando = false;
+                            this.usuariosTemp = usuarios;
+
                           }
                        })
     
@@ -60,13 +62,23 @@ export class UsuariosComponent implements OnInit {
 
   buscar( termino : string)
   {
-    this.busquedaService.buscar( 'usuarios', termino )
+    if ( termino.length == 0 )
+    {
+
+      this.usuarios = this.usuariosTemp;
+
+    } 
+    else 
+    {
+      this.busquedaService.buscar( 'usuarios', termino )
                         .subscribe(
                           (resp : any) => {
-                            console.log( resp );
                             this.usuarios = resp;
                           }
                         )
+
+    }
+    
   }
 
 }
