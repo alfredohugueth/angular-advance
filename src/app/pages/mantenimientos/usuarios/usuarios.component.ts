@@ -84,31 +84,54 @@ export class UsuariosComponent implements OnInit {
 
   eliminarUsuario( usuario : Usuario )
   {
-    console.log( 'eliminando' )
-    Swal.fire({
-      title: '¿Borrar Usuario?',
-      text: `Esta a punto de eliminar a ${ usuario.nombre }`,
-      icon: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Si, borrarlo'
-    }).then((result) => {
-      if (result.isConfirmed) {
 
-        this.usuarioService.eliminarUsuario( usuario )
-                           .subscribe( resp => {
-
-                             this.cargarUsuarios();
-                             
-                             Swal.fire( 'Usuario Borrado',
-                                         `${ usuario.nombre } fue eliminado correctamente`,
-                                         'success'
-                          
+    /* Verificamos que no se elimine el usuario actual */
+    if ( usuario.uid === this.usuarioService.uid )
+    {
+      return Swal.fire( 'Error','No puede borrar a ese usuario ', 'error')
+    }
+  
+      console.log( 'eliminando' )
+      return Swal.fire({
+        title: '¿Borrar Usuario?',
+        text: `Esta a punto de eliminar a ${ usuario.nombre }`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Si, borrarlo'
+      }).then((result) => {
+        if (result.isConfirmed) 
+        {
+  
+          this.usuarioService.eliminarUsuario( usuario )
+                             .subscribe( resp => 
+                              {
+  
+                               this.cargarUsuarios();
+                               
+                              Swal.fire( 'Usuario Borrado',
+                                           `${ usuario.nombre } fue eliminado correctamente`,
+                                           'success'
+                            
+                                        )
+                            
+                              }
                                       )
+        }
+      })
+
+    
+  }
+
+  cambiarRole( usuario : Usuario )
+  {
+    console.log( usuario );
+    this.usuarioService.guardarUsuario( usuario )
+                       .subscribe( resp => 
+                        {
                           
-                                   }
-                          )
-      }
-    })
+                          console.log( resp );
+
+                        })
   }
 
 }

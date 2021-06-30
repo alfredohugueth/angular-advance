@@ -184,19 +184,13 @@ export class UsuarioService {
 
   actualizarPerfil( data : { email : string, nombre : string, role : string | undefined } )
   {
-
     data = {
-    
+      
       ...data,
       role : this.usuario.role
-    
-    };
 
-    return this.http.put( `${base_url}/usuarios/${ this.uid }`, data, { headers : {
-      
-      'x-token' : this.token
-    
-    }} )
+    }
+    return this.http.put( `${base_url}/usuarios/${ this.uid }`, data, this.headers )
     
   }
 
@@ -227,6 +221,13 @@ export class UsuarioService {
 
     console.log( 'Eliminando' );
     return this.http.delete( `${ base_url }/usuarios/${ usuario.uid }`, this.headers );
+
+  }
+
+  guardarUsuario( usuario : Usuario )
+  {
+    
+    return this.http.put( `${base_url}/usuarios/${ usuario.uid }`, usuario, this.headers )
 
   }
 }
