@@ -10,6 +10,7 @@ import { LoginForm } from '../interfaces/login-form.interface';
 import { RegisterForm } from '../interfaces/register-form.interface';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario.model';
+import { cargarUsuario } from '../interfaces/cargar-usuarios.interface';
 
 const base_url = environment.base_url;
 declare const gapi : any;
@@ -42,6 +43,17 @@ export class UsuarioService {
 
     return this.usuario.uid || '';
 
+  }
+
+  get headers()
+  {
+    return {
+      headers : {
+      
+        'x-token' : this.token
+      
+      }
+    }
   }
 
   validarToken() : Observable<boolean> {
@@ -185,5 +197,10 @@ export class UsuarioService {
     
     }} )
     
+  }
+
+  cargarUsuarios( desde : number = 0 )
+  {
+    return this.http.get<cargarUsuario>( `${ base_url}/usuarios?desde=${ desde }`, this.headers )
   }
 }
