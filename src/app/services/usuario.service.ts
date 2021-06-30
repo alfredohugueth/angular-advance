@@ -11,6 +11,7 @@ import { RegisterForm } from '../interfaces/register-form.interface';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/usuario.model';
 import { cargarUsuario } from '../interfaces/cargar-usuarios.interface';
+import Swal from 'sweetalert2';
 
 const base_url = environment.base_url;
 declare const gapi : any;
@@ -219,5 +220,13 @@ export class UsuarioService {
                         };
                       })
                     )
+  }
+
+  eliminarUsuario( usuario : Usuario )
+  {
+
+    console.log( 'Eliminando' );
+    return this.http.delete( `${ base_url }/usuarios/${ usuario.uid }`, this.headers );
+
   }
 }
