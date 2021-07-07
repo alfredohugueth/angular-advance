@@ -14,7 +14,7 @@ export class Hospital
 
         public _id : string,
         public nombre : string,
-        public ima? : string,
+        public img? : string,
         public usuario? : _hospitalUser
 
     )
