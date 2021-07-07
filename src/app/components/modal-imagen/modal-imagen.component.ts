@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { FileUploadService } from 'src/app/services/file-upload.service';
 import { ModalImagenService } from 'src/app/services/modal-imagen.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-modal-imagen',
@@ -13,7 +15,8 @@ export class ModalImagenComponent implements OnInit {
   public imgTemp : any;
 
 
-  constructor( public modalImagenService : ModalImagenService ) { }
+
+  constructor( public modalImagenService : ModalImagenService, private fileUploadService: FileUploadService ) { }
 
   ngOnInit(): void {
   }
@@ -51,6 +54,23 @@ export class ModalImagenComponent implements OnInit {
       }
       
     }
+  }
+
+  subirImagen()
+  {
+
+    const id = this.modalImagenService.id;
+    const tipo = this.modalImagenService.tipo;
+
+    this.fileUploadService.actualizarFoto( this.imagenSubir, tipo, id || '' )
+    .then( img => {
+      Swal.fire( 'Actualizado', 'La imagen fue actualizada satisfactoriamente.', 'success');
+
+      this.modalImagenService.nuevaImagen.emit( img );
+      
+      this.cerrarModal();
+    })
+    .catch( err => console.log( err ));
   }
 
 
