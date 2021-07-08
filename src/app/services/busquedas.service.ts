@@ -61,6 +61,12 @@ export class BusquedasService {
                             return this.transformarUsuarios( resp.resultados );
                           break;
 
+                          case 'hospitales' :
+                            
+                            return resp.resultados;
+
+                          break
+
                           default :
                             return ''
                           break

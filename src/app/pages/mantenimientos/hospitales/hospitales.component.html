@@ -10,7 +10,9 @@
 
                 <input type="text"
                         class="form-control"
-                        placeholder="Buscar hospital..."/>
+                        placeholder="Buscar hospital..."
+                        (keyup)="buscar(txtBuscarHospital.value)"
+                        #txtBuscarHospital>
             </div>
 
         </div>

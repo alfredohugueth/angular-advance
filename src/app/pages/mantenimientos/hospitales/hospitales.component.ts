@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { Hospital } from 'src/app/models/hospital.model';
 import { HospitalService } from 'src/app/services/hospital.service';
 import { ModalImagenService } from 'src/app/services/modal-imagen.service';
+import { BusquedasService } from 'src/app/services/busquedas.service';
 
 @Component({
   selector: 'app-hospitales',
@@ -17,8 +18,10 @@ export class HospitalesComponent implements OnInit {
   public hospitales : Hospital[] = [];
   public cargando : boolean = true;
   public imgSubs! : Subscription;
+  public hospitalesTemp! : Hospital[];
 
-  constructor( private hospitalService : HospitalService, private modalImageService : ModalImagenService ) { }
+
+  constructor( private hospitalService : HospitalService, private modalImageService : ModalImagenService, private busquedaService : BusquedasService ) { }
 
   ngOnInit(): void 
   {
@@ -47,6 +50,7 @@ export class HospitalesComponent implements OnInit {
           {
             this.cargando = false;
             this.hospitales = hospitales;
+            this.hospitalesTemp = hospitales;
           })
 
   }
@@ -79,7 +83,7 @@ export class HospitalesComponent implements OnInit {
 
   async abrirSweetAlert()
   {
-    const { value } = await Swal.fire<string>({
+    const { value = '' } = await Swal.fire<string>({
       title : 'Crear Hospital',
       text : 'Ingrese el nombre del hospital',
       input: 'text',
@@ -106,4 +110,28 @@ export class HospitalesComponent implements OnInit {
     this.modalImageService.abrirModal( 'hospitales', hospital._id, hospital.img );
 
   }
+
+  buscar( termino : string)
+  {
+    if ( termino.length == 0 )
+    {
+
+      this.hospitales = this.hospitalesTemp;
+
+    } 
+    else 
+    {
+      this.busquedaService.buscar( 'hospitales', termino )
+                        .subscribe(
+                          (resp : any) => {
+
+                            this.hospitales = resp;
+                          
+                          }
+                        )
+
+    }
+    
+  }
+
 }
