@@ -1,5 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { delay } from 'rxjs/operators';
 import { Medico } from 'src/app/models/medico.model';
+import { BusquedasService } from 'src/app/services/busquedas.service';
 import { MedicoService } from 'src/app/services/medico.service';
 import { ModalImagenService } from 'src/app/services/modal-imagen.service';
 
@@ -9,16 +12,36 @@ import { ModalImagenService } from 'src/app/services/modal-imagen.service';
   styles: [
   ]
 })
-export class MedicosComponent implements OnInit {
+export class MedicosComponent implements OnInit, OnDestroy {
 
   public cargando: boolean = true;
   public medicos! : Medico[];
+  public medicosTemp! : Medico[];
+  public imgSubs! : Subscription;
 
-  constructor( private medicosServices : MedicoService, private modalImageService : ModalImagenService ) { }
+  constructor( private medicosServices : MedicoService, private modalImageService : ModalImagenService, private busquedaService : BusquedasService ) { }
+
+  ngOnDestroy(): void {
+
+    this.imgSubs.unsubscribe();
+  
+  }
 
   ngOnInit(): void {
 
     this.cargarMedicos();
+
+    this.imgSubs = this.modalImageService.nuevaImagen
+    .pipe(
+      delay(200)
+    )
+    .subscribe( img => 
+      {
+        
+        this.cargarMedicos();
+
+      })
+
 
   }
 
@@ -33,6 +56,7 @@ export class MedicosComponent implements OnInit {
         this.cargando = false;
         console.log( res );
         this.medicos = res;
+        this.medicosTemp = this.medicos
 
       }
     )
@@ -44,6 +68,29 @@ export class MedicosComponent implements OnInit {
 
     this.modalImageService.abrirModal( 'medicos', medico._id, medico.img );
 
+  }
+
+  buscar( termino : string )
+  {
+    if ( termino.length == 0 )
+    {
+
+      this.medicos = this.medicosTemp;
+
+    } 
+    else 
+    {
+      this.busquedaService.buscar( 'medicos', termino )
+                        .subscribe(
+                          (resp : any) => {
+
+                            this.medicos = resp;
+                          
+                          }
+                        )
+
+    }
+    
   }
 
 }

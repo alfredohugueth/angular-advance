@@ -8,7 +8,9 @@
 
                 <input type="text"
                         class="form-control"
-                        placeholder="Buscar Médico..."/>
+                        placeholder="Buscar Médico..."
+                        #txtMedico
+                        (keyup)="buscar( txtMedico.value )"/>
             </div>
 
         </div>
@@ -50,8 +52,29 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Médicos</h4>
-                <h6 class="card-subtitle">Médicos registrados en la aplicación.</h6>
+                
+                <div class="row">
+                    
+                    <div class="col-8">
+                        
+                        <h4 class="card-title">Médicos ({{ medicos.length }})</h4>
+                        <h6 class="card-subtitle">Médicos registrados en la aplicación.</h6>
+                        
+                    </div>
+                    
+                    <div class="col text-right">
+                        
+                        <a class="btn btn-primary" 
+                            routerLink="/dashboard/medico/nuevo">
+                            
+                            <i class="fa fa-hospital-o"></i>
+                            Crear hospital
+        
+                        </a>
+                        
+                        
+                    </div>
+                </div>
                 <div class="table-responsive">
                     <table class="table table-bordered">
                         <thead>
@@ -70,7 +93,10 @@
                                          (click)="abrirModal( medico )"></td>
                                 <td>{{ medico.nombre }}</td>                                
                                 <td class="text-nowrap text-center">
-                                    <a href="#" data-toggle="tooltip" data-original-title="Editar"> <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
+                                    <a [routerLink]="[ '/dashboard/medico', medico._id ]" 
+                                        data-toggle="tooltip" 
+                                        data-original-title="Editar"
+                                        > <i class="fa fa-pencil text-inverse m-r-10"></i> </a>
                                     <a href="#" data-toggle="tooltip" data-original-title="Borrar"> <i class="fa fa-close text-danger"></i> </a>
                                 </td>
                             </tr>    

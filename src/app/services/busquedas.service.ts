@@ -67,6 +67,12 @@ export class BusquedasService {
 
                           break
 
+                          case 'medicos' :
+
+                            return resp.resultados
+
+                          break
+
                           default :
                             return ''
                           break
