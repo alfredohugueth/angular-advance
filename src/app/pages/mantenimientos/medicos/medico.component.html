@@ -6,7 +6,9 @@
                 <h4 class="card-title">médico</h4>
                 <h6 class="card-subtitle">Actualizar información</h6>
 
-                <form class="form-horizontal p-t-20">
+                <form class="form-horizontal p-t-20"
+                        [formGroup]="medicoForm"
+                        (submit)="guardarMedico()">
 
                     <div class="form-group row">
                 
@@ -30,7 +32,11 @@
                         
                             <div class="input-group">
                                 <div class="input-group-addon"><i class="ti-user"></i></div>
-                                <input type="text" class="form-control" id="exampleInputuname3" placeholder="Nombre del Médico">
+                                <input type="text" 
+                                        class="form-control" 
+                                        id="exampleInputuname3" 
+                                        placeholder="Nombre del Médico"
+                                        formControlName="nombre">
                             </div>
                         
                         </div>
@@ -41,12 +47,9 @@
                         <div class="col-sm-9">
                             <div class="input-group">
                                 
-                                <select class="form-control">
-                                    <option> Hospital 1</option>
-                                    <option> Hospital 2</option>
-                                    <option> Hospital 3</option>
-                                    <option> Hospital 4</option>
-
+                                <select class="form-control" formControlName="hospital">
+                                    <option value=""> Seleccione Hospital </option>
+                                    <option *ngFor="let hospital of hospitales" [value]="hospital._id"> {{ hospital.nombre }} </option>                                                                                                            
                                 </select>
                             </div>
                         </div>
@@ -54,7 +57,9 @@
 
                     <div class="form-group row m-b-0 text-center ">
                         <div class="col-sm-12">
-                            <button type="submit" class="btn btn-success waves-effect waves-light">
+                            <button type="submit" 
+                                    class="btn btn-success waves-effect waves-light"
+                                    [disabled]="medicoForm.invalid">
                                  <i class="fa fa-save"></i>
                                  Guardar
                             </button>
