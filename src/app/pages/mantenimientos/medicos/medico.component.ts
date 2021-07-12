@@ -13,6 +13,7 @@ export class MedicoComponent implements OnInit {
 
   public medicoForm! : FormGroup;
   public hospitales! : Hospital[];
+  public hospitalSeleccionado! : Hospital | undefined;
 
   constructor( private fb : FormBuilder, private hospitalService : HospitalService ) { }
 
@@ -20,10 +21,18 @@ export class MedicoComponent implements OnInit {
   {
     this.medicoForm = this.fb.group({
       nombre : [ 'Alfredo', Validators.required],
-      hospital : [ '2', Validators.required]
+      hospital : [ '', Validators.required]
     })
 
     this.cargarHospitales();
+
+    this.medicoForm.get('hospital')?.valueChanges
+        .subscribe( hospitalID => 
+          {
+            
+            this.hospitalSeleccionado = this.hospitales.find( hospital => hospital._id === hospitalID );
+
+          })
 
   }
 

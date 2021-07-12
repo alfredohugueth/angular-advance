@@ -48,7 +48,7 @@
                             <div class="input-group">
                                 
                                 <select class="form-control" formControlName="hospital">
-                                    <option value=""> Seleccione Hospital </option>
+                                    <option value="" > Seleccione Hospital </option>
                                     <option *ngFor="let hospital of hospitales" [value]="hospital._id"> {{ hospital.nombre }} </option>                                                                                                            
                                 </select>
                             </div>
@@ -71,7 +71,7 @@
         </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-6 fadeIn fast" *ngIf="hospitalSeleccionado">
         <div class="card">
             <div class="card-body">
 
@@ -80,10 +80,14 @@
                 </h4>
 
                 <h6 class="card-subtitle">
-                    Hospital Asignado
+                    {{ hospitalSeleccionado?.nombre }}
                 </h6>
 
-                <img src="http://localhost:3000/api/upload/usuarios/no-img" class="w200">
+                <div class="text-center">
+                    
+                    <img [src]="hospitalSeleccionado?.img | imagen : 'hospitales' " class="img-thumbnail text-center">
+
+                </div>
 
 
             </div>
