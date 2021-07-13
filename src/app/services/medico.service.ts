@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { GetMedicoByID } from '../interfaces/backend-response';
 import { Medico } from '../models/medico.model';
 
 @Injectable({
@@ -66,6 +67,16 @@ export class MedicoService {
     return this.http.delete( `${ this.base_url}/medicos/${ _id }`, this.headers )
                     
                 
+  }
+
+  obtenerMedicoPorID( id : string )
+  {
+    return this.http.get<GetMedicoByID>( `${ this.base_url }/medicos/${ id }`, this.headers )
+                .pipe(
+
+                  map( resp  => resp.medicoDB )
+                  
+                )
   }
   
 
