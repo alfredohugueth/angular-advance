@@ -44,7 +44,7 @@ export class MedicoService {
   }
 
 
-  crearMedico ( medico : Medico )
+  crearMedico ( medico : { nombre : string, hospital : string } )
   {
 
     return this.http.post( `${ this.base_url}/medicos`, medico  ,this.headers )
