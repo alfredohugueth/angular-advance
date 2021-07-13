@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
 import { Hospital } from 'src/app/models/hospital.model';
 import { Medico } from 'src/app/models/medico.model';
 import { HospitalService } from 'src/app/services/hospital.service';
@@ -45,22 +46,41 @@ export class MedicoComponent implements OnInit {
           {
             
             this.hospitalSeleccionado = this.hospitales.find( hospital => hospital._id === hospitalID );
-
+            
           })
 
   }
 
   guardarMedico()
   {
-    console.log( this.medicoForm.value );
-    this.medicoService.crearMedico( this.medicoForm.value )
-        .subscribe( (resp : any ) => 
-          {
-            console.log( resp );
-            Swal.fire( 'Creado', `${ this.medicoForm.value.nombre } creado correctamente`, 'success');
-            this.router.navigateByUrl( `/dashboard/medico/${ resp.medico._id}`)
 
-          })
+    if ( this.medicoSeleccionado )
+    {
+
+      // actualizar
+      const data = {
+        ...this.medicoForm.value,
+        _id : this.medicoSeleccionado._id
+      }
+      this.medicoService.actualizarMedico( data )
+          .subscribe( resp =>
+            {
+              Swal.fire( 'Actualizado', `${ this.medicoForm.value.nombre } actualizado correctamente`, 'success');
+            })
+
+    }
+    else
+    {
+      
+      this.medicoService.crearMedico( this.medicoForm.value )
+          .subscribe( (resp : any ) => 
+            {
+              Swal.fire( 'Creado', `${ this.medicoForm.value.nombre } creado correctamente`, 'success');
+              this.router.navigateByUrl( `/dashboard/medico/${ resp.medico._id}`)
+  
+            })
+
+    }
   }
 
   cargarHospitales()
@@ -77,14 +97,30 @@ export class MedicoComponent implements OnInit {
 
   private cargarMedico( id : string )
   {
+    if ( id === 'nuevo') return; // Creando nuevo medico
 
     this.medicoService.obtenerMedicoPorID( id )
         .subscribe( medico => 
           {
-            
-            this.medicoSeleccionado = medico;
-            
+            if ( medico )
+            {
+
+              const { nombre, hospital } = medico;
+              const id  = hospital?._id;
+              this.medicoSeleccionado = medico;
+              this.medicoForm.setValue( { nombre, hospital: id } );
+
+            }
+            else 
+            {
+
+              // Se ingreso un medico incorrecto o usuario haciendo mal uso de rutas
+              this.router.navigateByUrl('/dashboard/medicos'); 
+
+            }
+
           })
+        
   }
 
 }

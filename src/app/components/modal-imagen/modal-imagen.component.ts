@@ -32,7 +32,6 @@ export class ModalImagenComponent implements OnInit {
   async cambiarImagen( $event : Event )
   {
 
-    console.log( $event );
     const target = ( $event.target as HTMLInputElement );
     const file = ( target.files as FileList)[0];
 

@@ -18,7 +18,6 @@ export class ProgressComponent{
   }
 
   cambioValorHijo( valor:number ){
-    console.log('se cambio el valor',valor);
     this.progreso1 = valor;
   }
   

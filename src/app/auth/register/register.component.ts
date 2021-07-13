@@ -35,7 +35,6 @@ export class RegisterComponent {
     
     this.formSubmitted = true;
 
-    console.log( this.registerForm);
 
     if ( this.registerForm.invalid ) {
       
@@ -46,15 +45,11 @@ export class RegisterComponent {
     this.usuarioService.crearUsuario( this.registerForm.value )
         .subscribe( res => {
           
-          console.log( 'Usuario Creado' );
-          console.log(' -------> El usuario creado es: ', res);
-
           // Navegar a Dashboard
           this.router.navigateByUrl('/');
 
         }, (err) => {
           
-          console.log(err);
           // Si sucede un error ....
           Swal.fire( 'Error', err.error.msg, 'error' );
 

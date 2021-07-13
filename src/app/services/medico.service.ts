@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { catchError, delay, map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { GetMedicoByID } from '../interfaces/backend-response';
 import { Medico } from '../models/medico.model';
@@ -12,7 +13,7 @@ export class MedicoService {
 
   public base_url : string = environment.base_url;
 
-  constructor( private http : HttpClient ) { }
+  constructor( private http : HttpClient, private router : Router ) { }
 
   get token() : string
   {
@@ -73,9 +74,9 @@ export class MedicoService {
   {
     return this.http.get<GetMedicoByID>( `${ this.base_url }/medicos/${ id }`, this.headers )
                 .pipe(
+                  delay( 100 ),
+                  map( resp  => resp.medicoDB ),
 
-                  map( resp  => resp.medicoDB )
-                  
                 )
   }
   

@@ -115,7 +115,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       return Swal.fire( 'Error','No puede borrar a ese usuario ', 'error')
     }
   
-      console.log( 'eliminando' )
       return Swal.fire({
         title: '¿Borrar Usuario?',
         text: `Esta a punto de eliminar a ${ usuario.nombre }`,
@@ -148,7 +147,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   cambiarRole( usuario : Usuario )
   {
-    console.log( usuario );
     this.usuarioService.guardarUsuario( usuario )
                        .subscribe( resp => 
                         {

@@ -63,7 +63,6 @@ export class HospitalesComponent implements OnInit, OnDestroy {
 
   guardarCambios( hospital : Hospital )
   {
-    console.log( hospital );
     this.hospitalService.actualizarHospital( hospital._id, hospital.nombre )
     .subscribe( res => 
       {
@@ -76,7 +75,6 @@ export class HospitalesComponent implements OnInit, OnDestroy {
 
   eliminarHospital( hospital : Hospital )
   {
-    console.log( hospital );
     this.hospitalService.borrarHospital( hospital._id )
     .subscribe( res => 
       {

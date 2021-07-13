@@ -89,12 +89,10 @@ export class LoginComponent implements OnInit {
   };
 
    attachSignin( element : any ) {
-    console.log(element.id);
     this.auth2.attachClickHandler(element, {},
         ( googleUser : any) => {
           
           const id_token = googleUser.getAuthResponse().id_token;
-          console.log('----> El token de google generado es: ', id_token);
           this.usuarioService.loginGoogle( id_token )
             .subscribe( resp => {
 

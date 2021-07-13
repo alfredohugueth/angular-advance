@@ -40,7 +40,6 @@ export class PerfilComponent implements OnInit {
   actualizarPerfil()
   {
 
-    console.log( this.profileForm?.value );
     this.userService.actualizarPerfil( this.profileForm.value )
       .subscribe( () => {
 
@@ -59,7 +58,6 @@ export class PerfilComponent implements OnInit {
   async cambiarImagen( $event : Event )
   {
 
-    console.log( $event );
     const target = ( $event.target as HTMLInputElement );
     const file = ( target.files as FileList)[0];
 

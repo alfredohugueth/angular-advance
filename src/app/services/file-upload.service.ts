@@ -21,7 +21,6 @@ export class FileUploadService {
       
       /* Creamos el formulario para el envió de la data y el url al que sera enviada*/
       const url = `${ this.base_url }/upload/${ tipo }/${ id }`
-      console.log( url );
       const formData = new FormData();
       formData.append( 'imagen', archivo );
 
