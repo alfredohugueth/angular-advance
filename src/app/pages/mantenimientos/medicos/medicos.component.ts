@@ -55,7 +55,6 @@ export class MedicosComponent implements OnInit, OnDestroy {
       {
 
         this.cargando = false;
-        console.log( res );
         this.medicos = res;
         this.medicosTemp = this.medicos
 
