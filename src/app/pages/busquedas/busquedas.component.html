@@ -8,14 +8,16 @@
 
                 <h3 class="card-title">Usuarios</h3>
 
-                <div class="alert alert-info">
+                <div class="alert alert-info animated fadeIn fast" *ngIf=" usuarios.length === 0">
                     <p class="mb-0">
                         No Hay usuarios con ese término.
                     </p>
                 </div>
 
-                <div class="table-responsive">
-                    <table class="table">
+                <div class="table-responsive animated fadeIn fast" 
+                     *ngIf=" usuarios.length > 0">
+                    
+                     <table class="table">
                         <thead>
                             
                             <tr>
@@ -27,9 +29,12 @@
                         
                         <tbody>
                             
-                            <tr>
-                                <td>1</td>
-                                <td>Deshmukh</td>                                
+                            <tr *ngFor="let usuario of usuarios"
+                                class="animated fadeIn fast">
+                                <td>
+                                    <img [src]="usuario.img | imagen:'usuarios'" class="w75">
+                                </td>
+                                <td>{{ usuario.nombre }}</td>                                
                             </tr>
                             
                         </tbody>
@@ -50,18 +55,19 @@
 
                 <h3 class="card-title">Médicos</h3>
 
-                <div class="alert alert-info">
+                <div class="alert alert-info animated fadeIn fast" 
+                     *ngIf="medicos.length === 0">
                     <p class="mb-0">
                         No Hay médicos con ese término.
                     </p>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive animated fadeIn fast" *ngIf="medicos.length > 0">
                     <table class="table">
                         <thead>
                             
                             <tr>
-                                <th>Avatar</th>
+                                <th>Foto</th>
                                 <th>Nombre</th>                                
                             </tr>
                         
@@ -69,9 +75,13 @@
                         
                         <tbody>
                             
-                            <tr>
-                                <td>1</td>
-                                <td>Deshmukh</td>                                
+                            <tr *ngFor="let medico of medicos"
+                                class="animated fadeIn fast cursor"
+                                (click)="abrirMedico( medico )">
+                                <td>
+                                    <img [src]="medico.img | imagen:'medicos'" class="w75">
+                                </td>
+                                <td>{{ medico.nombre }}</td>                                
                             </tr>
                             
                         </tbody>
@@ -92,18 +102,18 @@
 
                 <h3 class="card-title">Hospitales</h3>
 
-                <div class="alert alert-info">
+                <div class="alert alert-info animated fadeIn fast" *ngIf="hospitales.length === 0">
                     <p class="mb-0">
                         No Hay Hospitales con ese término.
                     </p>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive animated fadeIn fast" *ngIf="hospitales.length > 0">
                     <table class="table">
                         <thead>
                             
                             <tr>
-                                <th>Avatar</th>
+                                <th>Foto</th>
                                 <th>Nombre</th>                                
                             </tr>
                         
@@ -111,9 +121,12 @@
                         
                         <tbody>
                             
-                            <tr>
-                                <td>1</td>
-                                <td>Deshmukh</td>                                
+                            <tr *ngFor="let hospital of hospitales"
+                                class="animated fadeIn fast">
+                                <td>
+                                    <img [src]="hospital.img | imagen:'hospitales'" class="w75">
+                                </td>
+                                <td>{{ hospital.nombre }}</td>                                
                             </tr>
                             
                         </tbody>
