@@ -57,6 +57,12 @@ export class UsuarioService {
     }
   }
 
+  private guardarLocalStorage( token : string, menu : any )
+  {
+    localStorage.setItem( 'token', token );
+    localStorage.setItem( 'menu', JSON.stringify ( menu ) );
+  }
+
   validarToken() : Observable<boolean> {
 
 
@@ -85,8 +91,7 @@ export class UsuarioService {
 
         this.usuario = new Usuario( nombre, email, '', img, google, role, uid);
         
-        localStorage.setItem( 'token', resp[ 'token' ] );
-        console.log( this.usuario );
+        this.guardarLocalStorage( resp.token, resp.menu );
 
       }),
       map( resp => true ),
@@ -104,7 +109,7 @@ export class UsuarioService {
                     .pipe(
                       tap( (res : any) => {
 
-                        localStorage.setItem( 'token', res[ 'token' ] );
+                        this.guardarLocalStorage( res.token, res.menu );
 
                       })
                     )
@@ -121,6 +126,7 @@ export class UsuarioService {
                       tap( (res : any) => {
                         
                         localStorage.setItem( 'token', res[ 'token' ] );
+                        localStorage.setItem( 'menu', res[ 'menu' ]);
 
                       })
                     
@@ -138,7 +144,7 @@ export class UsuarioService {
                     
                       tap( (res : any) => {
                         
-                        localStorage.setItem( 'token', res[ 'token' ] );
+                        this.guardarLocalStorage( res.token, res.menu );
 
                       })
                     
@@ -149,6 +155,7 @@ export class UsuarioService {
   async logout() {
 
     localStorage.removeItem( 'token' );
+    localStorage.removeItem( 'menu' );
 
     this.auth2.signOut().then( () => {
 
