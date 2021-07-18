@@ -57,6 +57,11 @@ export class UsuarioService {
     }
   }
 
+  get role() : string | undefined
+  {
+    return this.usuario.role
+  }
+
   private guardarLocalStorage( token : string, menu : any )
   {
     localStorage.setItem( 'token', token );
